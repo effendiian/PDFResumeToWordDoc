@@ -603,6 +603,7 @@ namespace PDFToWordDoc
 			else { return false; } // If not in range.
 		}
 
-#endregion
+		#endregion
+
 	}
 }
