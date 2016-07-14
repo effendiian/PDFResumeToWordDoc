@@ -63,6 +63,7 @@
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
+                        <li><a runat="server" href="~/Parser/FileUpload">Upload</a></li>
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
@@ -89,7 +90,7 @@
             <hr />
             <footer>
                 <p>
-                    <span style="text-align: left">&copy; <%: DateTime.Now.Year %> Ian Effendi - Resume Formatter </span>
+                    <span style="text-align: left">&copy; <%: DateTime.Now.Year %> Ian Effendi - Resume Parser </span>
                     <span style="text-align: right">Check ou the developer's work <a href="https://about.me/ieffendi" target="_blank">here</a>. </span>
                 </p>
             </footer>

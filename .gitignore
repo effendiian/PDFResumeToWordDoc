@@ -250,3 +250,6 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/StorageToWordDoc/PDFParserService/Data/SHADOW-IV (New XPS 9550 QHD Laptop).txt
+/StorageToWordDoc/PDFParserService/Data/PortQryUI.exe
+*.csv
