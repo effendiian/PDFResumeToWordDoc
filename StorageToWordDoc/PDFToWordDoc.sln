@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFToWordDocTester", "Stora
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFParserService", "PDFParserService\PDFParserService.csproj", "{2D3EB3A0-DC90-46F8-96BE-F27736D8A8E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HireabilityXMLConversionLibrary", "HireabilityXMLConversionLibrary\HireabilityXMLConversionLibrary.csproj", "{293D084E-9DEB-425F-9E6A-7BE7EDA17B1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2D3EB3A0-DC90-46F8-96BE-F27736D8A8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D3EB3A0-DC90-46F8-96BE-F27736D8A8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D3EB3A0-DC90-46F8-96BE-F27736D8A8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293D084E-9DEB-425F-9E6A-7BE7EDA17B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293D084E-9DEB-425F-9E6A-7BE7EDA17B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293D084E-9DEB-425F-9E6A-7BE7EDA17B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293D084E-9DEB-425F-9E6A-7BE7EDA17B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
