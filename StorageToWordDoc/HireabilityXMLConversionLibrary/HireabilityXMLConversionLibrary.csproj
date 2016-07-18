@@ -47,18 +47,18 @@
     <Compile Include="Core\Contacts\PostalAddress.cs" />
     <Compile Include="Core\CSV\CSVConversion.cs" />
     <Compile Include="Core\CSV\CsvDocument.cs" />
+    <Compile Include="Core\Education\EducationHistory.cs" />
+    <Compile Include="Core\Education\SchoolHistory.cs" />
+    <Compile Include="Core\Employment\EmploymentHistory.cs" />
+    <Compile Include="Core\Employment\PositionHistory.cs" />
     <Compile Include="Core\HireAbilityXMLResults.cs" />
     <Compile Include="Core\NonXMLResume.cs" />
     <Compile Include="Core\ProcessingErrors.cs" />
     <Compile Include="Core\StructuredXMLResume.cs" />
-    <Compile Include="Core\XMLConversion.cs" />
     <Compile Include="Core\XMLCore.cs" />
-    <Compile Include="Core\XMLDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\History\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

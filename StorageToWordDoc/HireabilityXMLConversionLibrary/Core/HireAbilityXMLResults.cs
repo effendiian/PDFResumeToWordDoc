@@ -19,7 +19,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		private string _xmlnsxsi;
 		private string _schemaLocation;
 		private DateTime _timeStamp;
-		private ProcessingErrors _procErrors;
+		private List<ProcessingErrors> _procErrors = new List<ProcessingErrors>();
 
 		#endregion
 
@@ -77,6 +77,12 @@ namespace HireabilityXMLConversionLibrary.Core
 		{
 			get { return this._schemaLocation; }
 			set { this._schemaLocation = value; }
+		}
+
+		public List<ProcessingErrors> Errors
+		{
+			get { return this._procErrors; }
+			set { this._procErrors = value; }
 		}
 
 		/// <summary>

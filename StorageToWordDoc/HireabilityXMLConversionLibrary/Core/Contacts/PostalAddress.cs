@@ -14,7 +14,7 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 		#region Attributes
 
 		public string _countrycode;
-		public int _postalcode;
+		public string _postalcode;
 		public string _region;
 		public string _municipality;
 		public string _streetline;
@@ -40,7 +40,7 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 			set { this._countrycode = value.ToUpper().Trim(); }
 		}
 
-		public int PostalCode
+		public string PostalCode
 		{
 			get { return this._postalcode; }
 			set { this._postalcode = value; }

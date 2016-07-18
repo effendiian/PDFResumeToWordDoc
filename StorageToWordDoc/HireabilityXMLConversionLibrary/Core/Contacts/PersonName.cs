@@ -26,7 +26,7 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 			get { return this._format; }
 			set { this._format = value; }
 		}
-
+		
 		public string GivenName
 		{
 			get { return this._given; }

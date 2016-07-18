@@ -227,6 +227,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Parser\Download.aspx" />
     <Content Include="Parser\Web.config" />
     <None Include="Properties\PublishProfiles\PDFParserService.pubxml" />
     <None Include="Properties\PublishProfiles\ServicePublication_1.pubxml" />
@@ -425,6 +426,13 @@
     </Compile>
     <Compile Include="Parser\Directory.aspx.designer.cs">
       <DependentUpon>Directory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\Download.aspx.cs">
+      <DependentUpon>Download.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Parser\Download.aspx.designer.cs">
+      <DependentUpon>Download.aspx</DependentUpon>
     </Compile>
     <Compile Include="Parser\FileUpload.aspx.cs">
       <DependentUpon>FileUpload.aspx</DependentUpon>

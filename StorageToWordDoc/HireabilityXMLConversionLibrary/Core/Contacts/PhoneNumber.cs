@@ -16,6 +16,7 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 		private int _countrycode = 1; // US = 1.
 		private int _areacode; // = (###)
 		private int _subscriber; // = ###-####	
+		private int _ext;
 
 		#endregion
 
@@ -29,7 +30,8 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 				string ac = "(" + this._areacode + ")";
 				string substr = "" + this._subscriber;
 				string sub = "" + substr.Substring(0, 3) + " - " + substr.Substring(3, substr.Length - 3);
-				return cc + " " + ac + " " + sub;
+				string ext = ".ext " + this._ext;
+				return cc + " " + ac + " " + sub + " " + ext;
 			}
 		}
 
@@ -54,13 +56,19 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 			set { this._subscriber = value; }
 		}
 
+		public int Extension
+		{
+			get { return this._ext; }
+			set { this._ext = value; }
+		}
+
 		#endregion
 
 		#region Constructor
 
 		public PhoneNumber() { }
 
-		public PhoneNumber(int country, int area, int sub)
+		public PhoneNumber(int country, int area, int sub, int ext)
 		{
 			this.CountryCode = country;
 			this.AreaCode = area;

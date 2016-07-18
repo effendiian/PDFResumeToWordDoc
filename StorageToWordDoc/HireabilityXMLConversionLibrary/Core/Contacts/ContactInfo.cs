@@ -73,6 +73,11 @@ namespace HireabilityXMLConversionLibrary.Core.Contacts
 			set { this._name.FamilyName = value.Trim(); }
 		}
 
+		public PersonName PersonName
+		{
+			get { return this._name; }
+		}
+
 		// Contacts.
 		public string PersonalEmail
 		{

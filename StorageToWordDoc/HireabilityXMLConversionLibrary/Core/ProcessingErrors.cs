@@ -13,7 +13,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		#region Attributes
 
 		private int _id;
-		private int _code = 0;
+		private string _code = "";
 		private string _msg = "";
 
 		#endregion
@@ -33,7 +33,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		/// ErrorCode returns the
 		/// error's code.
 		/// </summary>
-		public int ErrorCode
+		public string ErrorCode
 		{
 			get { return this._code; }
 			set { this._code = value; }

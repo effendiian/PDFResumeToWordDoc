@@ -18,6 +18,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		// Conversion Codes.
 		public const string XML_CSV = "XML to CSV";
 		public const string CSV_XML = "CSV to XML";
+		public const string PRODUCT_CODE = "";
 
 		#endregion
 
@@ -27,10 +28,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		private string _filename;
 		private string _blob;
 		private XmlDocument _xmldoc;
-
-		// Storage
-		private Dictionary<string, XMLConversion> _conversions; // Conversions are saved here.
-
+		
 		// Flags
 		private bool _initialized;
 
@@ -61,20 +59,7 @@ namespace HireabilityXMLConversionLibrary.Core
 		{
 			get { return this._xmldoc; }
 		}
-
-		public CsvDocument CSVDocument
-		{
-			get
-			{
-				// Have we initialized?
-				if(!_initialized) { return null; }
-
-				// Does it exist in the dictionary?
-				return _conversions[XML_CSV].GetDocument();
-			}
-		}
-
-		// public CSVCore CSV;		
+		
 		// public XMLCore XML;
 
 		// Flags
@@ -86,6 +71,21 @@ namespace HireabilityXMLConversionLibrary.Core
 		public bool Initialized
 		{
 			get { return this._initialized; }
+		}
+
+		public HireAbilityXMLResults ParserResults
+		{
+			get; set;
+		}
+
+		public StructuredXMLResume StructuredResume
+		{
+			get; set;
+		}
+
+		public NonXMLResume Resume
+		{
+			get; set;
 		}
 
 		#endregion
@@ -119,9 +119,11 @@ namespace HireabilityXMLConversionLibrary.Core
 				this._xmldoc = new XmlDocument();
 				this._xmldoc.Load(this._filename);
 
-				this._conversions = new Dictionary<string, XMLConversion>();
-				this._conversions.Add(XML_CSV, null);
+				ParserResults = new HireAbilityXMLResults();
+				StructuredResume = new StructuredXMLResume();
+				Resume = new NonXMLResume();
 
+				Parse(this._filename);
 				this._initialized = true;
 				return;
 			}
@@ -138,8 +140,242 @@ namespace HireabilityXMLConversionLibrary.Core
 
 
 		// TODO: Focus on turning into a CSV file.
+		public string GetAttribute(string attr, XmlReader reader)
+		{
+			if (reader.HasAttributes)
+			{
+				if (reader.GetAttribute(attr) != null)
+				{
+					return reader[attr];
+				}
+			}
+			return "";
+		}
 
 
+		public void Parse(string xmlDoc)
+		{
+			// Read the nodes.
+			using (XmlReader reader = XmlReader.Create(xmlDoc))
+			{
+				while (reader.Read())
+				{
+					// Only detect start elements.
+					if (reader.IsStartElement() && reader.NodeType == XmlNodeType.Element)
+					{
+						// Get element name and perform a case-switch statement on it.
+						switch (reader.Name)
+						{
+							case "HireAbilityXMLResults":
+								if (reader.HasAttributes)
+								{
+									ParserResults.ID = Int32.Parse(GetAttribute("id", reader));
+									ParserResults.RID = GetAttribute("rid", reader);
+								}
+								break;
+							case "Resume":
+								if (reader.HasAttributes)
+								{
+									ParserResults.Language = reader.GetAttribute("xml:lang");
+									ParserResults.Namespace = reader.GetAttribute("xmlns");
+									ParserResults.NamespaceXSI = reader.GetAttribute("xmlns:xsi");
+									ParserResults.SchemaLocation = reader.GetAttribute("xsi:schemaLocation");
+								}
+								break;
+							case "PersonName":
+								// // Formatted Name
+								reader.ReadToFollowing("FormattedName");
+								if (reader.HasValue)
+								{
+									StructuredResume.ContactInfo.PersonName.FormattedName = reader.Value.Trim();
+								}
+								
+								// // First Name
+								reader.ReadToFollowing("GivenName");
+								if (reader.HasValue) { StructuredResume.ContactInfo.FirstName = reader.Value; }
+								
+								// // Middle Name
+								reader.ReadToFollowing("MiddleName");
+								if (reader.HasValue) { StructuredResume.ContactInfo.MiddleName = reader.Value; }
+								
+								// // Last Name
+								reader.ReadToFollowing("FamilyName");
+								if (reader.HasValue) { StructuredResume.ContactInfo.LastName = reader.Value; }
+								break;
+							case "PostalAddress":
+								// // Country Code
+								reader.ReadToFollowing("CountryCode");
+								if (reader.HasValue) { StructuredResume.ContactInfo.PersonalAddress.CountryCode = reader.Value; }
+
+								// // Postal Code
+								reader.ReadToFollowing("PostalCode");
+								if (reader.HasValue) { StructuredResume.ContactInfo.PersonalAddress.PostalCode = reader.Value; }
+
+								// // Region
+								reader.ReadToFollowing("Region");
+								if (reader.HasValue) { StructuredResume.ContactInfo.PersonalAddress.Region = reader.Value; }
+
+								// // Municipality
+								reader.ReadToFollowing("Municipality");
+								if (reader.HasValue) { StructuredResume.ContactInfo.PersonalAddress.Municipality = reader.Value; }
+
+								// // Delivery Address // // Address Line
+								reader.ReadToFollowing("AddressLine");
+								if (reader.HasValue) { StructuredResume.ContactInfo.PersonalAddress.Street = reader.Value; }
+								break;
+							case "Use":
+								string use = "personal";
+								if (reader.HasValue)
+								{
+									use = reader.Value.Trim();
+								}
+
+								switch (use)
+								{
+									case "personal":
+										reader.ReadToFollowing("Telephone");
+										reader.ReadToDescendant("InternationalCountryCode");
+										if (reader.HasValue) { StructuredResume.ContactInfo.PersonalNumber.CountryCode = Int32.Parse(reader.Value.Trim()); }
+
+										reader.ReadToFollowing("AreaCityCode");
+										if (reader.HasValue) { StructuredResume.ContactInfo.PersonalNumber.AreaCode = Int32.Parse(reader.Value.Trim()); }
+										
+										reader.ReadToFollowing("SubscriberNumber");
+										if (reader.HasValue) { StructuredResume.ContactInfo.PersonalNumber.SubscriberNumber = Int32.Parse(reader.Value.Trim()); }
+
+										reader.ReadToFollowing("Extension");
+										if (reader.HasValue) { StructuredResume.ContactInfo.PersonalNumber.Extension = Int32.Parse(reader.Value.Trim()); }
+										break;
+
+									case "business":
+										reader.ReadToFollowing("Telephone");
+										reader.ReadToDescendant("InternationalCountryCode");
+										if (reader.HasValue) { StructuredResume.ContactInfo.BusinessNumber.CountryCode = Int32.Parse(reader.Value.Trim()); }
+
+										reader.ReadToFollowing("AreaCityCode");
+										if (reader.HasValue) { StructuredResume.ContactInfo.BusinessNumber.AreaCode = Int32.Parse(reader.Value.Trim()); }
+
+										reader.ReadToFollowing("SubscriberNumber");
+										if (reader.HasValue) { StructuredResume.ContactInfo.BusinessNumber.SubscriberNumber = Int32.Parse(reader.Value.Trim()); }
+
+										reader.ReadToFollowing("Extension");
+										if (reader.HasValue) { StructuredResume.ContactInfo.BusinessNumber.Extension = Int32.Parse(reader.Value.Trim()); }
+										break;
+								}
+								break;
+							case "InternetEmailAddress":
+								if (reader.HasValue && !StructuredResume.ContactInfo.HasPersonalEmail) { StructuredResume.ContactInfo.PersonalEmail = reader.Value.Trim(); }
+								break;
+							case "EmployerOrg":
+								string employer = "";
+
+								reader.ReadToFollowing("EmployerOrgName");
+								if (reader.HasValue) {
+									employer = reader.Value.Trim();
+
+									Employment.PositionHistory experience = new Employment.PositionHistory();
+
+									reader.ReadToFollowing("PositionHistory");
+									reader.ReadToFollowing("Title");
+									if (reader.HasValue) { experience.Title = reader.Value.Trim(); }
+
+									reader.ReadToFollowing("PositionLocation");
+									reader.ReadToFollowing("Region");
+									if (reader.HasValue) { experience.Region = reader.Value.Trim(); }
+
+									reader.ReadToFollowing("Municipality");
+									if (reader.HasValue) { experience.Municipality = reader.Value.Trim(); }
+
+									reader.ReadToFollowing("Description");
+									if (reader.HasValue) { experience.Description = reader.Value.Trim(); }
+
+									// reader.Ree
+
+
+
+									//StructuredResume.EmploymentHistory.AddHistory()
+								}
+
+								break;
+							case "Error":
+								ProcessingErrors proc = new ProcessingErrors();
+								if (reader.HasAttributes) { proc.ID = Int32.Parse(GetAttribute("id", reader)); }
+
+								// // Error Code
+								reader.ReadToDescendant("ErrorCode");
+								if (reader.HasValue) { proc.ErrorCode = reader.Value.Trim(); }
+								
+								// // Error Message
+								reader.ReadToDescendant("ErrorMessage");
+								if (reader.HasValue) { proc.ErrorMessage = reader.Value.Trim(); }
+								
+								ParserResults.Errors.Add(proc);
+								break;
+						}
+					}
+				}
+								
+
+				// // Resume
+				reader.ReadToDescendant("Resume");
+
+				// // Processing Errors
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				while (reader.Read())
+				{
+					if ((reader.NodeType == XmlNodeType.Element))
+					{
+						switch (reader.Name)
+						{
+							case "HireAbilityXMLResults":
+								if (reader.HasAttributes)
+								{
+									ParserResults.ID = Int32.Parse(reader.GetAttribute("id"));
+									ParserResults.RID = reader.GetAttribute("rid");
+								}
+								break;
+							case "Resume":
+								if (reader.HasAttributes)
+								{
+									ParserResults.Language = reader.GetAttribute("xml:lang");
+									ParserResults.Namespace = reader.GetAttribute("xmlns");
+									ParserResults.NamespaceXSI = reader.GetAttribute("xmlns:xsi");
+									ParserResults.SchemaLocation = reader.GetAttribute("xsi:schemaLocation");
+								}
+								break;
+							case "GivenName":
+								StructuredResume.ContactInfo.FirstName = reader.Value;
+
+								break;
+
+
+
+
+
+						}
+					}
+				}
+			}
+		}
 
 
 
